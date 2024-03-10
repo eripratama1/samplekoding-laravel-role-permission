@@ -52,24 +52,35 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $permission = Permission::findById($id);
+        return view('permission.edit',['permission' => $permission]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required'
+        ]);
+
+        $permissions = Permission::findById($id);
+        $permissions->name = $request->input('name');
+        $permissions->update();
+
+        return to_route('manage-permission.index')->with('info','Permission berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $permissions = Permission::findById($id);
+        $permissions->delete();
+        return to_route('manage-permission.index')->with('info','Permission berhasil dihapus');
     }
 }
