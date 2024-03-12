@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -11,7 +12,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return view('role.index',['role' => Role::latest()->get()]);
     }
 
     /**
@@ -19,7 +20,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('role.create');
     }
 
     /**
@@ -27,7 +28,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|unique:roles,name'
+        ]);
+
+        $role = new Role;
+        $role->name = $request->input('name');
+        $role->save();
+
+        return to_route('manage-role.index')->with('info','Role berhasil ditambahkan');
     }
 
     /**

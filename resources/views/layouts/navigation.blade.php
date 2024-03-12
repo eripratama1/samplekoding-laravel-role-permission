@@ -19,6 +19,10 @@
                     <x-nav-link :href="route('manage-permission.index')" :active="request()->routeIs('manage-permission*')">
                         {{ __('Manage Permission') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('manage-role.index')" :active="request()->routeIs('manage-role*')">
+                        {{ __('Manage Role') }}
+                    </x-nav-link>
                 </div>
             </div>
 
