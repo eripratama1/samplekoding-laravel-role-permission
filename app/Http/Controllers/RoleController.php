@@ -12,7 +12,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('role.index',['role' => Role::latest()->get()]);
+        return view('role.index', ['role' => Role::latest()->get()]);
     }
 
     /**
@@ -28,7 +28,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|unique:roles,name'
         ]);
 
@@ -36,7 +36,7 @@ class RoleController extends Controller
         $role->name = $request->input('name');
         $role->save();
 
-        return to_route('manage-role.index')->with('info','Role berhasil ditambahkan');
+        return to_route('manage-role.index')->with('info', 'Role berhasil ditambahkan');
     }
 
     /**
@@ -50,24 +50,35 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $role = Role::findById($id);
+        return view('role.edit', ['role' => $role]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $role = Role::findById($id);
+        $role->name = $request->input('name');
+        $role->update();
+
+        return to_route('manage-role.index')->with('info', 'Role berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $role = Role::findById($id);
+        $role->delete();
+        return to_route('manage-role.index')->with('info', 'Role berhasil dihapus');
     }
 }
