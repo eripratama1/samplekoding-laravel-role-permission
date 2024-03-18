@@ -39,7 +39,7 @@
                             dark:hover:bg-blue-700
                             dark:focus:ring-blue-800
                             ">Create
-                                new permission
+                                new role
                             </a>
                         </div>
 
@@ -47,6 +47,7 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">Role name</th>
+                                    <th scope="col" class="px-6 py-3">Permission name</th>
                                     <th scope="col" class="px-6 py-3">Actions</th>
                                 </tr>
                             </thead>
@@ -57,6 +58,16 @@
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $item->name }}
                                         </th>
+                                        <td class="px-6 py-4">
+                                            @if (!empty($item->getPermissionNames()))
+                                                @foreach ($item->getPermissionNames() as $itemPermission)
+                                                    <span
+                                                        class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                                        {{ $itemPermission }}
+                                                    </span>
+                                                @endforeach
+                                            @endif
+                                        </td>
                                         <td class="px6 py-4">
                                             <div class="flex items-center space-x-2">
                                                 <a href="{{ route('manage-role.edit', $item->id) }}"
@@ -99,6 +110,25 @@
                                                     dark:hover:bg-red-700
                                                     dark:focus:ring-red-800">Delete</button>
                                                 </form>
+
+                                                <a href="{{ route('manage-role.show', $item->id) }}"
+                                                    class=" px-3
+                                                py-2
+                                                text-sm
+                                                font-medium
+                                                text-center
+                                                text-white
+                                                bg-emerald-700
+                                                rounded-lg
+                                                hover:bg-emerald-800
+                                                focus:ring-4
+                                                focus:outline-none
+                                                focus:ring-emerald-300
+                                                dark:bg-emerald-600
+                                                dark:hover:bg-emerald-700
+                                                dark:focus:ring-emerald-800">
+                                                    Assign permission
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

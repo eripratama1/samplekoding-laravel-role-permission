@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -12,7 +14,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('role.index', ['role' => Role::latest()->get()]);
+        return view('role.index', [
+            'role' => Role::latest()->get(),
+            'permissions' => Permission::latest()->get()
+        ]);
     }
 
     /**
@@ -42,9 +47,27 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $role = Role::findById($id);
+        /**
+        * Dalam kode di atas, perintah DB::table('role_has_permissions') menentukan tabel yang akan digunakan,
+          yaitu role_has_permissions. Selanjutnya, where digunakan untuk menentukan kondisi pencarian,
+          yaitu role_id yang sama dengan variabel $id.
+
+          Perintah pluck digunakan untuk mengambil atribut yang diinginkan, yaitu permission_id, dan all digunakan untuk mengembalikan seluruh hasil dalam bentuk array.
+          Jadi, kode ini akan mengembalikan array dari permission_id yang terkait dengan role_id tertentu.
+         */
+        $rolePermissions = DB::table('role_has_permissions')
+            ->where('role_has_permissions.role_id', $id)
+            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+            ->all();
+
+        return view('role.assignPermission', [
+            'role' => $role,
+            'rolePermissions' => $rolePermissions,
+            'permissions' => Permission::latest()->get()
+        ]);
     }
 
     /**
@@ -80,5 +103,15 @@ class RoleController extends Controller
         $role = Role::findById($id);
         $role->delete();
         return to_route('manage-role.index')->with('info', 'Role berhasil dihapus');
+    }
+
+    public function assignPermission(Request $request, $id)
+    {
+        $role = Role::findById($id);
+
+        /** Proses sinkronisasi permission dengan data role yang ada */
+        $role->syncPermissions($request->input('permission'));
+
+        return to_route('manage-role.index')->with('info', 'Permission berhasil diperbarui');
     }
 }

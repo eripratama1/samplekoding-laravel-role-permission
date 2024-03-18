@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('manage-permission',PermissionController::class);
     Route::resource('manage-role', RoleController::class);
+    Route::put('assign-permission/{id}',[RoleController::class,'assignPermission'])->name('assingPermission');
 });
 
 require __DIR__.'/auth.php';
