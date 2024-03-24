@@ -29,13 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('manage-permission',PermissionController::class);
-    Route::resource('manage-role', RoleController::class);
-    Route::put('assign-permission/{id}',[RoleController::class,'assignPermission'])->name('assingPermission');
+    Route::middleware('role:admin')->group(function(){
+        Route::resource('manage-permission',PermissionController::class);
+        Route::resource('manage-role', RoleController::class);
+        Route::put('assign-permission/{id}',[RoleController::class,'assignPermission'])->name('assingPermission');
 
-    Route::get('list-users',[\App\Http\Controllers\UserController::class,'index'])->name('list-users');
-    Route::get('assign-role/{id}',[\App\Http\Controllers\UserController::class,'assignRole'])->name('assignRole');
-    Route::put('set-role/{id}',[\App\Http\Controllers\UserController::class,'setRoleUser'])->name('setRole');
+        Route::get('list-users',[\App\Http\Controllers\UserController::class,'index'])->name('list-users');
+        Route::get('assign-role/{id}',[\App\Http\Controllers\UserController::class,'assignRole'])->name('assignRole');
+        Route::put('set-role/{id}',[\App\Http\Controllers\UserController::class,'setRoleUser'])->name('setRole');
+    });
 
 });
 

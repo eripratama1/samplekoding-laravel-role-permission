@@ -21,26 +21,28 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="relative overflow-x-auto shadow-sm sm:rounded-lg">
                         <div class="my-3 mr-1 flex items-end justify-end">
+                            @canany(['create','update', 'delete'])
                             <a href="{{ route('manage-role.create') }}"
-                                class="
-                            px-3
-                            py-2
-                            text-sm
-                            font-medium
-                            text-center
-                            text-white
-                            bg-blue-700
-                            rounded-lg
-                            hover:bg-blue-800
-                            focus:ring-4
-                            focus:outline-none
-                            focus:ring-blue-300
-                            dark:bg-blue-600
-                            dark:hover:bg-blue-700
-                            dark:focus:ring-blue-800
-                            ">Create
-                                new role
-                            </a>
+                            class="
+                        px-3
+                        py-2
+                        text-sm
+                        font-medium
+                        text-center
+                        text-white
+                        bg-blue-700
+                        rounded-lg
+                        hover:bg-blue-800
+                        focus:ring-4
+                        focus:outline-none
+                        focus:ring-blue-300
+                        dark:bg-blue-600
+                        dark:hover:bg-blue-700
+                        dark:focus:ring-blue-800
+                        ">Create
+                            new role
+                        </a>
+                            @endcanany
                         </div>
 
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -69,6 +71,8 @@
                                             @endif
                                         </td>
                                         <td class="px6 py-4">
+                                            @canany(['create','read','update','delete'])
+
                                             <div class="flex items-center space-x-2">
                                                 <a href="{{ route('manage-role.edit', $item->id) }}"
                                                     class=" px-3
@@ -130,6 +134,7 @@
                                                     Assign permission
                                                 </a>
                                             </div>
+                                            @endcanany
                                         </td>
                                     </tr>
                                 @endforeach
